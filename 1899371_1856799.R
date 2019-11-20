@@ -95,7 +95,7 @@ length(temperature)
 ########################### Fin de l'analyse des données #######################
 
 ########################### Modèle et hypothèse ################################
-
+##Voir histogramme des variables pour posé la loi 
 
 
 
