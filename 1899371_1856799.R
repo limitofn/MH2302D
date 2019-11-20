@@ -18,7 +18,7 @@ temperature
 
 ########################### Analyse Des Données ################################
 
-################## Histogramme des variables ##########################
+############################ Histogramme des variables #########################
 #Aka distribution des donnees
 
 #histogramme de la quantite d'electricite
@@ -60,7 +60,7 @@ plot(temperature, type = "h", ylab = "Température en Celsius", xlab = "Temps éco
      main = "Dispersion des valeurs de la température 
      à partir de 2008-01-01")
 
-########################## Graphique Quantile-Quantile ####################
+############################ Graphique Quantile-Quantile ####################
 
 #Graphique quantite d'electricite
 qqnorm(quantiteElectricite, main ="Diagramme de probabilités normal de la production électrique")
@@ -95,6 +95,21 @@ length(temperature)
 ########################### Fin de l'analyse des données #######################
 
 ########################### Modèle et hypothèse ################################
+
+
+
+
+
+########################### Fin Modèle et hypothèse ############################
+
+########################### Régression linéaire ################################
+
+
+
+
+
+
+########################### Fin Régression linéaire ############################
 
 
 
