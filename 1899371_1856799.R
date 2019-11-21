@@ -66,15 +66,11 @@ plot(temperature, type = "h", ylab = "Température en Celsius", xlab = "Temps éco
 qqnorm(quantiteElectricite, main ="Diagramme de probabilités normal de la production électrique")
 qqline(quantiteElectricite)
 
-#Graphique quantite d'electricite
-qqnorm(quantiteElectricite, main ="Diagramme de probabilités normal de la production électrique")
-qqline(quantiteElectricite)
-
 #Graphique prix de vente 
 qqnorm(prixElectricite, main ="Diagramme de probabilités normal de la vente d'électricité")
 qqline(prixElectricite)
 
-#Graphique quantite d'electricite
+#Graphique Température
 qqnorm(temperature, main ="Diagramme de probabilités normal de la température")
 qqline(temperature)
 
@@ -104,10 +100,85 @@ length(temperature)
 
 ########################### Régression linéaire ################################
 
+## Température indépendante, production électrique dépendante
+modeLineaireProduction <- lm(quantiteElectricite~ temperature)
+summary(modeLineaireProduction)
 
+#Coefficient 
+modeLineaireProduction$coefficients
 
+#R^2
+summary(modeLineaireProduction)$r.sq
 
+#Creation du graphique
+par(mfrow = c(1,1))
+plot(temperature,quantiteElectricite, main = "Production électrique mensuelle selon la température moyenne",
+     xlab = "Température en Celsius", ylab = "Production électrique (Mw/h)")
+abline(modeLineaireProduction)
 
+#Analyse de la variance 
+anova(modeLineaireProduction)
+
+#Analyse des résidus
+par(mfrow = c(2,2))
+plot(modeLineaireProduction)
+
+## production électrique indépendante, prix dépendante 
+modeLineairePrix <- lm(prixElectricite~ quantiteElectricite)
+summary(modeLineairePrix)
+
+#Coefficient 
+modeLineairePrix$coefficients
+
+#R^2
+summary(modeLineairePrix)$r.sq
+
+#Creation du graphique
+par(mfrow = c(1,1))
+plot(quantiteElectricite,prixElectricite, main = "Prix de l'électricité selon la quantité produite",
+     xlab = "Production électrique (Mw/h)", ylab = "Prix de l'étricité pour 5000kw")
+abline(modeLineairePrix)
+
+#Analyse de la variance 
+anova(modeLineairePrix)
+
+#Analyse des résidus
+par(mfrow = c(2,2))
+plot(modeLineairePrix)
+
+##Régression lineaire multiple (Prix dépendant, quantité et température indépendante)
+modelLineaireMult <- lm(prixElectricite~ quantiteElectricite + temperature)
+summary(modelLineaireMult)
+
+#Coefficient
+modelLineaireMult$coefficients
+
+#R^2
+summary(modelLineaireMult)$r.sq
+
+#Creation du graphique
+library(scatterplot3d) #À installer à l'aide de install.packages("scatterplot3d")
+library(RColorBrewer) #À installer à l'aide de install.packages("RColorBrewer")
+
+# get colors for labeling the points
+plotvar <- prixElectricite # pick a variable to plot
+nclr <- 8 # number of colors
+plotclr <- brewer.pal(nclr,"PuBu") # get the colors
+colornum <- cut(rank(plotvar), nclr, labels=FALSE)
+colcode <- plotclr[colornum] # assign color
+
+# scatter plot
+plot.angle <- 45
+scatterplot3d(quantiteElectricite, temperature, prixElectricite, type="h", angle=plot.angle, color=colcode, pch=20, cex.symbols=2, 
+              col.axis="gray", col.grid="gray", main = "Prix de l'électricité selon la température et la quantité produite",
+              xlab = "Production Électrique (Mw/h)", ylab = "Température en Celsius", zlab = "Prix de l'électricité pour 5000Kw")
+
+#Analyse de la variance
+anova(modelLineaireMult)
+
+#Analyse des résidus
+par(mfrow = c(2,2))
+plot(modelLineaireMult)
 
 ########################### Fin Régression linéaire ############################
 
