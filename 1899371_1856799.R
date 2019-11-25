@@ -1,4 +1,9 @@
-
+######## Installation packages ##########
+## Loading required package: ggplot2 , ggfortify, tseries, forecast-- utiliser install.packages("ggplot2") ou l'installateur de Rstudio
+library(ggplot2)
+library(ggfortify)
+library(tseries)
+library(forecast)
 ######## Set le path ##########
 setwd(dir="C:/GitHub/MH2302D")
 
@@ -11,9 +16,11 @@ summary(donnees)
 ########################### Variable #######################################
 quantiteElectricite <- donnees$�lectricit�.produites..M�gawatt.heures.
 quantiteElectricite
+quantiteElectriciteTs <- ts(quantiteElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 
 prixElectricite <- donnees$Prix.de.vente.de.l.�lectricit�..5000Kw.
 prixElectricite
+prixElectriciteTs <- ts(prixElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 
 temperature <- donnees$Temp�rature.moyen.en.Celsius
 temperature
@@ -21,10 +28,21 @@ temperatureTs <- ts(temperature, start = c(2008, 1), end=c(2019, 6), frequency =
 
 ########################### Analyse Des Donn�es ################################
 ############################ Exploration de Times-Series #########################
-data(AirPassengers)
-class(AirPassengers)
-start(AirPassengers)
+
+#Temperature
 boxplot(temperatureTs~cycle(temperatureTs))
+decomposeTemperature <- decompose(temperatureTs,"multiplicative")
+autoplot(decomposeTemperature)
+
+#Production Electricite
+boxplot(quantiteElectriciteTs~cycle(quantiteElectriciteTs))
+decomposeProdElec <- decompose(quantiteElectriciteTs,"multiplicative")
+autoplot(decomposeProdElec)
+
+#Prix Electricite
+boxplot(prixElectriciteTs~cycle(prixElectriciteTs))
+decomposePrixElec <- decompose(prixElectriciteTs,"multiplicative")
+autoplot(decomposePrixElec)
 
 ############################ Histogramme des variables #########################
 #Aka distribution des donnees
