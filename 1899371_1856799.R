@@ -2,21 +2,29 @@
 ######## Set le path ##########
 setwd(dir="C:/GitHub/MH2302D")
 
-######################### Entrée des données ################################# 
+######################### Entrï¿½e des donnï¿½es ################################# 
 donnees <- read.csv("1899371_1856799.csv", header = TRUE, sep = ";",dec = ",")
 donnees
 
 summary(donnees)
 
 ########################### Variable #######################################
-quantiteElectricite <- donnees$Électricité.produites..Mégawatt.heures.
+quantiteElectricite <- donnees$ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.
 quantiteElectricite
-prixElectricite <- donnees$Prix.de.vente.de.l.électricité..5000Kw.
-prixElectricite
-temperature <- donnees$Température.moyen.en.Celsius
-temperature
 
-########################### Analyse Des Données ################################
+prixElectricite <- donnees$Prix.de.vente.de.l.ï¿½lectricitï¿½..5000Kw.
+prixElectricite
+
+temperature <- donnees$Tempï¿½rature.moyen.en.Celsius
+temperature
+temperatureTs <- ts(temperature, start = c(2008, 1), end=c(2019, 6), frequency = 12)
+
+########################### Analyse Des Donnï¿½es ################################
+############################ Exploration de Times-Series #########################
+data(AirPassengers)
+class(AirPassengers)
+start(AirPassengers)
+boxplot(temperatureTs~cycle(temperatureTs))
 
 ############################ Histogramme des variables #########################
 #Aka distribution des donnees
@@ -24,9 +32,11 @@ temperature
 #histogramme de la quantite d'electricite
 hist( quantiteElectricite,col="red",main="Histogramme de la production moyenne d'electricte",
       xlab="Intervalle de megawatt/heure",ylab="Effectif", labels = T)
+
 #Histogramme du prix de l'electricite
 hist( prixElectricite,col="green",main="Histogramme du prix de vente moyen de l'electricite",
       xlab="Intervalle de prix",ylab="Effectif", labels = T)
+
 #Histogramme de la temperature
 hist( temperature,col="orange",main="Histogramme de la temperature moyenne",
       xlab="Intervalle de temperature",ylab="Effectif", labels = T)
@@ -46,35 +56,35 @@ boxplot(temperature, col="orange", horizontal=T, notch = T)
 ############################ Plot #########################################
 
 #plot de quantite d'electricite produite
-plot(quantiteElectricite, type = "h", ylab = "Quantite d'electricite produite (Megawatt/h)", xlab = "Temps écoulé (mois)", 
+plot(quantiteElectricite, type = "h", ylab = "Quantite d'electricite produite (Megawatt/h)", xlab = "Temps ï¿½coulï¿½ (mois)", 
      main = "Dispersion des valeurs de la production electrique 
-     à partir de 2008-01-01")
+     ï¿½ partir de 2008-01-01")
 
-#plot du prix de la vente d'électricité
-plot(prixElectricite, type = "h", ylab = "Prix de vente pour 5000Kw", xlab = "Temps écoulé (mois)", 
-     main = "Dispersion des valeurs du prix de vente de l'électricité 
-     à partir de 2008-01-01")
+#plot du prix de la vente d'ï¿½lectricitï¿½
+plot(prixElectricite, type = "h", ylab = "Prix de vente pour 5000Kw", xlab = "Temps ï¿½coulï¿½ (mois)", 
+     main = "Dispersion des valeurs du prix de vente de l'ï¿½lectricitï¿½ 
+     ï¿½ partir de 2008-01-01")
 
-#plot de la température
-plot(temperature, type = "h", ylab = "Température en Celsius", xlab = "Temps écoulé (mois)", 
-     main = "Dispersion des valeurs de la température 
-     à partir de 2008-01-01")
+#plot de la tempï¿½rature
+plot(temperature, type = "h", ylab = "Tempï¿½rature en Celsius", xlab = "Temps ï¿½coulï¿½ (mois)", 
+     main = "Dispersion des valeurs de la tempï¿½rature 
+     ï¿½ partir de 2008-01-01")
 
 ############################ Graphique Quantile-Quantile ####################
 
 #Graphique quantite d'electricite
-qqnorm(quantiteElectricite, main ="Diagramme de probabilités normal de la production électrique")
+qqnorm(quantiteElectricite, main ="Diagramme de probabilitï¿½s normal de la production ï¿½lectrique")
 qqline(quantiteElectricite)
 
 #Graphique prix de vente 
-qqnorm(prixElectricite, main ="Diagramme de probabilités normal de la vente d'électricité")
+qqnorm(prixElectricite, main ="Diagramme de probabilitï¿½s normal de la vente d'ï¿½lectricitï¿½")
 qqline(prixElectricite)
 
-#Graphique Température
-qqnorm(temperature, main ="Diagramme de probabilités normal de la température")
+#Graphique Tempï¿½rature
+qqnorm(temperature, main ="Diagramme de probabilitï¿½s normal de la tempï¿½rature")
 qqline(temperature)
 
-#### La moyenne, l'écart-type, la variance et la taille de l'échantillon #####
+#### La moyenne, l'ï¿½cart-type, la variance et la taille de l'ï¿½chantillon #####
 
 #Quantite d'electricite
 summary(quantiteElectricite)
@@ -88,19 +98,19 @@ length(prixElectricite)
 summary(temperature)
 length(temperature)
 
-########################### Fin de l'analyse des données #######################
+########################### Fin de l'analyse des donnï¿½es #######################
 
-########################### Modèle et hypothèse ################################
-##Voir histogramme des variables pour posé la loi 
-
-
+########################### Modï¿½le et hypothï¿½se ################################
+##Voir histogramme des variables pour posï¿½ la loi 
 
 
-########################### Fin Modèle et hypothèse ############################
 
-########################### Régression linéaire ################################
 
-## Température indépendante, production électrique dépendante
+########################### Fin Modï¿½le et hypothï¿½se ############################
+
+########################### Rï¿½gression linï¿½aire ################################
+
+## Tempï¿½rature indï¿½pendante, production ï¿½lectrique dï¿½pendante
 modeLineaireProduction <- lm(quantiteElectricite~ temperature)
 summary(modeLineaireProduction)
 
@@ -112,18 +122,18 @@ summary(modeLineaireProduction)$r.sq
 
 #Creation du graphique
 par(mfrow = c(1,1))
-plot(temperature,quantiteElectricite, main = "Production électrique mensuelle selon la température moyenne",
-     xlab = "Température en Celsius", ylab = "Production électrique (Mw/h)")
+plot(temperature,quantiteElectricite, main = "Production ï¿½lectrique mensuelle selon la tempï¿½rature moyenne",
+     xlab = "Tempï¿½rature en Celsius", ylab = "Production ï¿½lectrique (Mw/h)")
 abline(modeLineaireProduction)
 
 #Analyse de la variance 
 anova(modeLineaireProduction)
 
-#Analyse des résidus
+#Analyse des rï¿½sidus
 par(mfrow = c(2,2))
 plot(modeLineaireProduction)
 
-## production électrique indépendante, prix dépendante 
+## production ï¿½lectrique indï¿½pendante, prix dï¿½pendante 
 modeLineairePrix <- lm(prixElectricite~ quantiteElectricite)
 summary(modeLineairePrix)
 
@@ -135,18 +145,18 @@ summary(modeLineairePrix)$r.sq
 
 #Creation du graphique
 par(mfrow = c(1,1))
-plot(quantiteElectricite,prixElectricite, main = "Prix de l'électricité selon la quantité produite",
-     xlab = "Production électrique (Mw/h)", ylab = "Prix de l'étricité pour 5000kw")
+plot(quantiteElectricite,prixElectricite, main = "Prix de l'ï¿½lectricitï¿½ selon la quantitï¿½ produite",
+     xlab = "Production ï¿½lectrique (Mw/h)", ylab = "Prix de l'ï¿½tricitï¿½ pour 5000kw")
 abline(modeLineairePrix)
 
 #Analyse de la variance 
 anova(modeLineairePrix)
 
-#Analyse des résidus
+#Analyse des rï¿½sidus
 par(mfrow = c(2,2))
 plot(modeLineairePrix)
 
-##Régression lineaire multiple (Prix dépendant, quantité et température indépendante)
+##Rï¿½gression lineaire multiple (Prix dï¿½pendant, quantitï¿½ et tempï¿½rature indï¿½pendante)
 modelLineaireMult <- lm(prixElectricite~ quantiteElectricite + temperature)
 summary(modelLineaireMult)
 
@@ -157,8 +167,8 @@ modelLineaireMult$coefficients
 summary(modelLineaireMult)$r.sq
 
 #Creation du graphique
-library(scatterplot3d) #À installer à l'aide de install.packages("scatterplot3d")
-library(RColorBrewer) #À installer à l'aide de install.packages("RColorBrewer")
+library(scatterplot3d) #ï¿½ installer ï¿½ l'aide de install.packages("scatterplot3d")
+library(RColorBrewer) #ï¿½ installer ï¿½ l'aide de install.packages("RColorBrewer")
 
 # get colors for labeling the points
 plotvar <- prixElectricite # pick a variable to plot
@@ -170,17 +180,17 @@ colcode <- plotclr[colornum] # assign color
 # scatter plot
 plot.angle <- 45
 scatterplot3d(quantiteElectricite, temperature, prixElectricite, type="h", angle=plot.angle, color=colcode, pch=20, cex.symbols=2, 
-              col.axis="gray", col.grid="gray", main = "Prix de l'électricité selon la température et la quantité produite",
-              xlab = "Production Électrique (Mw/h)", ylab = "Température en Celsius", zlab = "Prix de l'électricité pour 5000Kw")
+              col.axis="gray", col.grid="gray", main = "Prix de l'ï¿½lectricitï¿½ selon la tempï¿½rature et la quantitï¿½ produite",
+              xlab = "Production ï¿½lectrique (Mw/h)", ylab = "Tempï¿½rature en Celsius", zlab = "Prix de l'ï¿½lectricitï¿½ pour 5000Kw")
 
 #Analyse de la variance
 anova(modelLineaireMult)
 
-#Analyse des résidus
+#Analyse des rï¿½sidus
 par(mfrow = c(2,2))
 plot(modelLineaireMult)
 
-########################### Fin Régression linéaire ############################
+########################### Fin Rï¿½gression linï¿½aire ############################
 
 
 
