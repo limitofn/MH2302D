@@ -44,6 +44,16 @@ boxplot(prixElectriciteTs~cycle(prixElectriciteTs))
 decomposePrixElec <- decompose(prixElectriciteTs,"multiplicative")
 autoplot(decomposePrixElec)
 
+#Dickers Fuller Test : Elles sont toutes stationnaires! On rejette l'hypothese nulle si p > 0.05 l'hypothese alternative est la stationnarite
+#Temperature
+adf.test(temperatureTs)
+
+#Production Electricite :
+adf.test(quantiteElectriciteTs)
+
+#Prix Electricite :
+adf.test(prixElectriciteTs)
+
 ############################ Histogramme des variables #########################
 #Aka distribution des donnees
 
