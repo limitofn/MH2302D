@@ -58,7 +58,7 @@ adf.test(prixElectriciteTs)
 #Aka distribution des donnees
 
 #histogramme de la quantite d'electricite
-hist( quantiteElectricite,col="red",main="Histogramme de la production moyenne d'electricte",
+hist( quantiteElectricite,col="red",main="Histogramme de la production moyenne d'électricté",
       xlab="Intervalle de megawatt/heure",ylab="Effectif", labels = T)
 
 #Histogramme du prix de l'electricite
@@ -84,46 +84,52 @@ boxplot(temperature, col="orange", horizontal=T, notch = T)
 ############################ Plot #########################################
 
 #plot de quantite d'electricite produite
-plot(quantiteElectricite, type = "h", ylab = "Quantite d'electricite produite (Megawatt/h)", xlab = "Temps ï¿½coulï¿½ (mois)", 
+plot(quantiteElectricite, type = "h", ylab = "Quantite d'electricite produite (Megawatt/h)", xlab = "Temps écoulé (mois)", 
      main = "Dispersion des valeurs de la production electrique 
-     ï¿½ partir de 2008-01-01")
+     à partir de 2008-01-01")
 
 #plot du prix de la vente d'ï¿½lectricitï¿½
-plot(prixElectricite, type = "h", ylab = "Prix de vente pour 5000Kw", xlab = "Temps ï¿½coulï¿½ (mois)", 
-     main = "Dispersion des valeurs du prix de vente de l'ï¿½lectricitï¿½ 
-     ï¿½ partir de 2008-01-01")
+plot(prixElectricite, type = "h", ylab = "Prix de vente pour 5000Kw", xlab = "Temps écoulé (mois)", 
+     main = "Dispersion des valeurs du prix de vente de l'électricité 
+     à partir de 2008-01-01")
 
 #plot de la tempï¿½rature
-plot(temperature, type = "h", ylab = "Tempï¿½rature en Celsius", xlab = "Temps ï¿½coulï¿½ (mois)", 
-     main = "Dispersion des valeurs de la tempï¿½rature 
-     ï¿½ partir de 2008-01-01")
+plot(temperature, type = "h", ylab = "Température en Celsius", xlab = "Temps écoulé (mois)", 
+     main = "Dispersion des valeurs de la température 
+     à partir de 2008-01-01")
 
 ############################ Graphique Quantile-Quantile ####################
 
 #Graphique quantite d'electricite
-qqnorm(quantiteElectricite, main ="Diagramme de probabilitï¿½s normal de la production ï¿½lectrique")
+qqnorm(quantiteElectricite, main ="Diagramme de probabilitïés normal de la production électrique")
 qqline(quantiteElectricite)
 
 #Graphique prix de vente 
-qqnorm(prixElectricite, main ="Diagramme de probabilitï¿½s normal de la vente d'ï¿½lectricitï¿½")
+qqnorm(prixElectricite, main ="Diagramme de probabilités normal de la vente d'électricité")
 qqline(prixElectricite)
 
 #Graphique Tempï¿½rature
-qqnorm(temperature, main ="Diagramme de probabilitï¿½s normal de la tempï¿½rature")
+qqnorm(temperature, main ="Diagramme de probabilités normal de la température")
 qqline(temperature)
 
 #### La moyenne, l'ï¿½cart-type, la variance et la taille de l'ï¿½chantillon #####
 
 #Quantite d'electricite
 summary(quantiteElectricite)
-length(quantiteElectricite)
+sd(quantiteElectricite) #ecart-type
+sd(quantiteElectricite)/mean(quantiteElectricite) #variance
+length(quantiteElectricite) #taille
 
 #Prix de l'electricite 
 summary(prixElectricite)
+sd(prixElectricite) #ecart-type
+sd(prixElectricite)/mean(prixElectricite) #variance
 length(prixElectricite)
 
 #Temperature
 summary(temperature)
+sd(temperature) #ecart-type
+sd(temperature)/mean(temperature) #variance
 length(temperature)
 
 ########################### Fin de l'analyse des donnï¿½es #######################
@@ -150,8 +156,8 @@ summary(modeLineaireProduction)$r.sq
 
 #Creation du graphique
 par(mfrow = c(1,1))
-plot(temperature,quantiteElectricite, main = "Production ï¿½lectrique mensuelle selon la tempï¿½rature moyenne",
-     xlab = "Tempï¿½rature en Celsius", ylab = "Production ï¿½lectrique (Mw/h)")
+plot(temperature,quantiteElectricite, main = "Production électrique mensuelle selon la température moyenne",
+     xlab = "Température en Celsius", ylab = "Production électrique (Mw/h)")
 abline(modeLineaireProduction)
 
 #Analyse de la variance 
