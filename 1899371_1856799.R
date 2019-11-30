@@ -14,18 +14,20 @@ donnees
 
 summary(donnees)
 
+
+# ggplot(donnees,aes(Tempï¿½rature.moyen.en.Celsius, y = ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.))+geom_point()
 ########################### Variable #######################################
-quantiteElectricite <- donnees$Électricité.produites..Mégawatt.heures.
+quantiteElectricite <- donnees$ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.
 quantiteElectricite
 quantiteElectriciteTs <- ts(quantiteElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetElectriciteTs <- window(quantiteElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-prixElectricite <- donnees$Prix.de.vente.de.l.électricité..5000Kw.
+prixElectricite <- donnees$Prix.de.vente.de.l.ï¿½lectricitï¿½..5000Kw.
 prixElectricite
 prixElectriciteTs<- ts(prixElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-temperature <- donnees$Température.moyen.en.Celsius
+temperature <- donnees$Tempï¿½rature.moyen.en.Celsius
 temperature
 temperatureTs <- ts(temperature, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetTemperatureTs <- window(temperatureTs, start=c(2017,1), end=c(2018,12))
@@ -81,7 +83,7 @@ corrTempProd = ccf(temperatureTs,quantiteElectriciteTs)
 #Aka distribution des donnees
 
 #histogramme de la quantite d'electricite
-hist( quantiteElectricite,col="red",main="Histogramme de la production moyenne d'ï¿½lectrictï¿½",
+hist( quantiteElectricite,col="red",main="Histogramme de la production moyenne d'electricte",
       xlab="Intervalle de megawatt/heure",ylab="Effectif", labels = T)
 
 #Histogramme du prix de l'electricite
@@ -124,7 +126,7 @@ plot(temperature, type = "h", ylab = "Tempï¿½rature en Celsius", xlab = "Temps ï
 ############################ Graphique Quantile-Quantile ####################
 
 #Graphique quantite d'electricite
-qqnorm(quantiteElectricite, main ="Diagramme de probabilitïes normal de la production electrique")
+qqnorm(quantiteElectricite, main ="Diagramme de probabilitï¿½s normal de la production ï¿½lectrique")
 qqline(quantiteElectricite)
 
 #Graphique prix de vente 
@@ -164,14 +166,14 @@ length(temperature)
 
 
 
-####Prix Électricité
+####Prix ï¿½lectricitï¿½
 ##formatage des donnees pour correle avec une droite normale
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2013,1), end=c(2019,6))
 ##graphique des donnees formatees
 hist(subsetprixElectriciteTs)
 qqnorm(subsetprixElectriciteTs)
 qqline(subsetprixElectriciteTs)
-##moyenne, variance, écart-type
+##moyenne, variance, ï¿½cart-type
 summary(subsetprixElectriciteTs)
 S<- sd(subsetprixElectriciteTs) #ecart-type
 n<- length(subsetprixElectriciteTs)#le nombre d'observations
@@ -179,7 +181,7 @@ m<- mean(subsetprixElectriciteTs)#moyenne
 sigma <- var(subsetprixElectriciteTs) #variance
 ##Test Shapiro-Wilk
 shapiro.test(subsetprixElectriciteTs)
-##Détermination des parametres
+##Dï¿½termination des parametres
 #Moyenne theorique
 qt(1-0.025,n-1)
 Lm=m-qt(1-0.025,n-1)*S/sqrt(n)
@@ -192,7 +194,7 @@ Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
 Uv=(n-1)*S^2/qchisq(0.025,n-1)
 L
 U
-##Hypothèse H0:??=mu0 contre H1:??>mu0  
+##Hypothï¿½se H0:??=mu0 contre H1:??>mu0  
 t.test(subsetprixElectriciteTs, mu = Lm, alternative = "greater")
 ####
 
