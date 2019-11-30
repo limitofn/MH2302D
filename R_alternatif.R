@@ -2,9 +2,9 @@ library(lubridate)
 setwd(dir="C:\\Users\\marca\\Desktop\\MH2302D")
 
 
-donnees <- read.csv("1899371_1856799.csv", header = TRUE, sep = ";",dec = ",")
+donnees <- read.csv("BonnesDonnes.csv")
 
-colnames(donnees) <- c('id','date','prod','temp','prix')
+#colnames(donnees) <- c('id','date','prod','temp','prix')
 
 donnees$date<-as.Date(donnees$date)
 
