@@ -1,3 +1,5 @@
+library(lubridate)
+
 donnees <- read.csv("1899371_1856799.csv", header = TRUE, sep = ";",dec = ",")
 
 colnames(donnees) <- c('id','date','prod','temp','prix')
