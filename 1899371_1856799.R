@@ -15,17 +15,17 @@ donnees
 summary(donnees)
 
 ########################### Variable #######################################
-quantiteElectricite <- donnees$ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.
+quantiteElectricite <- donnees$Électricité.produites..Mégawatt.heures.
 quantiteElectricite
 quantiteElectriciteTs <- ts(quantiteElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetElectriciteTs <- window(quantiteElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-prixElectricite <- donnees$Prix.de.vente.de.l.ï¿½lectricitï¿½..5000Kw.
+prixElectricite <- donnees$Prix.de.vente.de.l.électricité..5000Kw.
 prixElectricite
 prixElectriciteTs<- ts(prixElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-temperature <- donnees$Tempï¿½rature.moyen.en.Celsius
+temperature <- donnees$Température.moyen.en.Celsius
 temperature
 temperatureTs <- ts(temperature, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetTemperatureTs <- window(temperatureTs, start=c(2017,1), end=c(2018,12))
@@ -124,44 +124,77 @@ plot(temperature, type = "h", ylab = "Tempï¿½rature en Celsius", xlab = "Temps ï
 ############################ Graphique Quantile-Quantile ####################
 
 #Graphique quantite d'electricite
-qqnorm(quantiteElectricite, main ="Diagramme de probabilitï¿½ï¿½s normal de la production ï¿½lectrique")
+qqnorm(quantiteElectricite, main ="Diagramme de probabilitïes normal de la production electrique")
 qqline(quantiteElectricite)
 
 #Graphique prix de vente 
-qqnorm(prixElectricite, main ="Diagramme de probabilitï¿½s normal de la vente d'ï¿½lectricitï¿½")
+qqnorm(prixElectricite, main ="Diagramme de probabilites normal de la vente d'electricite")
 qqline(prixElectricite)
 
-#Graphique Tempï¿½rature
-qqnorm(temperature, main ="Diagramme de probabilitï¿½s normal de la tempï¿½rature")
+#Graphique Temperature
+qqnorm(temperature, main ="Diagramme de probabilites normal de la temperature")
 qqline(temperature)
 
-#### La moyenne, l'ï¿½cart-type, la variance et la taille de l'ï¿½chantillon #####
+#### La moyenne, l'ecart-type, la variance et la taille de l'echantillon #####
 
 #Quantite d'electricite
 summary(quantiteElectricite)
 sd(quantiteElectricite) #ecart-type
-sd(quantiteElectricite)/mean(quantiteElectricite) #variance
+sd(quantiteElectricite)/mean(quantiteElectricite) #coefficient variance
+var(quantiteElectricite) #variance
 length(quantiteElectricite) #taille
 
 #Prix de l'electricite 
 summary(prixElectricite)
 sd(prixElectricite) #ecart-type
-sd(prixElectricite)/mean(prixElectricite) #variance
+sd(prixElectricite)/mean(prixElectricite) # coefficient variance
+var(prixElectricite) #variance
 length(prixElectricite)
 
 #Temperature
 summary(temperature)
 sd(temperature) #ecart-type
-sd(temperature)/mean(temperature) #variance
+sd(temperature)/mean(temperature) #coefficient variance
+var(temperature) #variance
 length(temperature)
 
 ########################### Fin de l'analyse des donnï¿½es #######################
 
-########################### Modï¿½le et hypothï¿½se ################################
-##Voir histogramme des variables pour posï¿½ la loi 
+########################### Modele et hypothese ################################
 
 
 
+####Prix Électricité
+##formatage des donnees pour correle avec une droite normale
+subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2013,1), end=c(2019,6))
+##graphique des donnees formatees
+hist(subsetprixElectriciteTs)
+qqnorm(subsetprixElectriciteTs)
+qqline(subsetprixElectriciteTs)
+##moyenne, variance, écart-type
+summary(subsetprixElectriciteTs)
+S<- sd(subsetprixElectriciteTs) #ecart-type
+n<- length(subsetprixElectriciteTs)#le nombre d'observations
+m<- mean(subsetprixElectriciteTs)#moyenne
+sigma <- var(subsetprixElectriciteTs) #variance
+##Test Shapiro-Wilk
+shapiro.test(subsetprixElectriciteTs)
+##Détermination des parametres
+#Moyenne theorique
+qt(1-0.025,n-1)
+Lm=m-qt(1-0.025,n-1)*S/sqrt(n)
+Um=m+qt(1-0.025,n-1)*S/sqrt(n)
+L
+U
+mu0= (L + U)/2
+#Variance theorique
+Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
+Uv=(n-1)*S^2/qchisq(0.025,n-1)
+L
+U
+##Hypothèse H0:??=mu0 contre H1:??>mu0  
+t.test(subsetprixElectriciteTs, mu = Lm, alternative = "greater")
+####
 
 ########################### Fin Modï¿½le et hypothï¿½se ############################
 
