@@ -6,7 +6,7 @@ library(tseries)
 library(forecast)
 library(corrplot)
 ######## Set le path ##########
-setwd(dir="C:\\Users\\marca\\Desktop\\MH2302D")
+setwd(dir="C:\Users\Guillaume Proulx\Desktop\Git hub\MH2302D")
 
 ######################### Entree des donnees ################################# 
 donnees <- read.csv("1899371_1856799.csv", header = TRUE, sep = ";",dec = ",")
@@ -164,7 +164,43 @@ length(temperature)
 
 ########################### Modele et hypothese ################################
 
+####Quantite electrique
+n<- length(quantiteElectricite) #le nombre d'observations
+x <- sum(quantiteElectricite)
+lambda <- n/x # lambda
+####
 
+####Temp�rature
+##formatage des donnees pour correle avec une droite normale
+subsetTemperatureTs <- window(temperatureTs, start=c(2009,1), end=c(2009,12))
+##graphique des donnees formatees
+hist(subsetTemperatureTs)
+qqnorm(subsetTemperatureTs)
+qqline(subsetTemperatureTs)
+##moyenne, variance, ecart-type
+summary(subsetTemperatureTs)
+S<- sd(subsetTemperatureTs) #ecart-type
+n<- length(subsetTemperatureTs)#le nombre d'observations
+m<- mean(subsetTemperatureTs)#moyenne
+sigma <- var(subsetTemperatureTs) #variance
+##Test Shapiro-Wilk
+shapiro.test(subsetTemperatureTs)
+##Determination des parametres
+#Moyenne theorique
+qt(1-0.025,n-1)
+Lm=m-qt(1-0.025,n-1)*S/sqrt(n)
+Um=m+qt(1-0.025,n-1)*S/sqrt(n)
+Lm
+Um
+mu0= (Lm + Um)/2
+#Variance theorique
+Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
+Uv=(n-1)*S^2/qchisq(0.025,n-1)
+Lv
+Uv
+##Hypothese H0:u0=mu0 contre H1:u1>mu0  
+t.test(subsetTemperatureTs, mu = Lm, alternative = "greater")
+####
 
 ####Prix electricite
 ##formatage des donnees pour correle avec une droite normale
@@ -194,7 +230,7 @@ Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
 Uv=(n-1)*S^2/qchisq(0.025,n-1)
 L
 U
-##Hypothese H0:??=mu0 contre H1:??>mu0  
+##Hypothese H0:u0=mu0 contre H1:u1>mu0  
 t.test(subsetprixElectriciteTs, mu = Lm, alternative = "greater")
 ####
 
