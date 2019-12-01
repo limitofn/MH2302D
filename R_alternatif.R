@@ -58,10 +58,15 @@ boxplot(prixTs~cycle(prixTs))
 
 #Test normalite temperature
 shapiro.test(donnees$temp)
+qqnorm(donnees$temp)
 #Test normalite Production
 shapiro.test(donnees$prod)
+qqnorm(donnees$prod)
 #test Normalite prix
 shapiro.test(donnees$prix)
+qqnorm(donnees$prix)
+
+# Temperature et production ne suivent pas une loi normale, le prix peut etre
 
 
 #variance et moyenne
@@ -76,6 +81,27 @@ mean(donnees$prod)
 #prix
 var(donnees$prix)
 mean(donnees$prix)
+
+
+#Analyse en time series :
+#Production Electrique :
+
+#TestDickers
+lambda <- BoxCox.lambda(tempTs)
+plot.ts(BoxCox(tempTs, lambda = lambda))
+T_tempTs <- BoxCox(tempTs, lambda = lambda)
+T_tempTs_d <- diff(T_tempTs)
+
+adf.test(T_tempTs_d, alternative="stationary", k=0)
+
+acf(T_tempTs_d)
+
+pacf(T_tempTs_d)
+
+#Construction du modele ARIMA
+fit <- arima(tempTs, c(0, 0, 0),seasonal = list(order = c(3, 0, 0), period = 12) )
+fit
+plot(forecast(fit,h=120))
 
 ########Generation des relations et regression polynomiale
 
