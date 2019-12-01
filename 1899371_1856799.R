@@ -6,28 +6,28 @@ library(tseries)
 library(forecast)
 library(corrplot)
 ######## Set le path ##########
-setwd(dir="C:\\Users\\marca\\Desktop\\MH2302D")
+setwd(dir="C:\Users\Guillaume Proulx\Desktop\Git hub\MH2302D")
 
-######################### Entrï¿½e des donnï¿½es ################################# 
+######################### Entree des donnees ################################# 
 donnees <- read.csv("1899371_1856799.csv", header = TRUE, sep = ";",dec = ",")
 donnees
 
 summary(donnees)
 
 
-# ggplot(donnees,aes(Tempï¿½rature.moyen.en.Celsius, y = ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.))+geom_point()
+# ggplot(donnees,aes(Temperature.moyen.en.Celsius, y = ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.))+geom_point()
 ########################### Variable #######################################
-quantiteElectricite <- donnees$ï¿½lectricitï¿½.produites..Mï¿½gawatt.heures.
+quantiteElectricite <- donnees$Électricité.produites..Mégawatt.heures.
 quantiteElectricite
 quantiteElectriciteTs <- ts(quantiteElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetElectriciteTs <- window(quantiteElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-prixElectricite <- donnees$Prix.de.vente.de.l.ï¿½lectricitï¿½..5000Kw.
+prixElectricite <- donnees$Prix.de.vente.de.l.électricité..5000Kw.
 prixElectricite
 prixElectriciteTs<- ts(prixElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-temperature <- donnees$Tempï¿½rature.moyen.en.Celsius
+temperature <- donnees$Température.moyen.en.Celsius
 temperature
 temperatureTs <- ts(temperature, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetTemperatureTs <- window(temperatureTs, start=c(2017,1), end=c(2018,12))
@@ -37,7 +37,7 @@ plot(subsetTemperatureTs,subsetElectriciteTs)
 plot(subsetElectriciteTs,subsetprixElectriciteTs)
 plot(subsetTemperatureTs,subsetprixElectriciteTs)
 
-########################### Analyse Des Donnï¿½es ################################
+########################### Analyse Des Donnees ################################
 ############################ Exploration de Times-Series #########################
 
 #Temperature
@@ -164,9 +164,45 @@ length(temperature)
 
 ########################### Modele et hypothese ################################
 
+####Quantite electrique
+n<- length(quantiteElectricite) #le nombre d'observations
+x <- sum(quantiteElectricite)
+lambda <- n/x # lambda
+####
 
+####Température
+##formatage des donnees pour correle avec une droite normale
+subsetTemperatureTs <- window(temperatureTs, start=c(2009,1), end=c(2009,12))
+##graphique des donnees formatees
+hist(subsetTemperatureTs)
+qqnorm(subsetTemperatureTs)
+qqline(subsetTemperatureTs)
+##moyenne, variance, ecart-type
+summary(subsetTemperatureTs)
+S<- sd(subsetTemperatureTs) #ecart-type
+n<- length(subsetTemperatureTs)#le nombre d'observations
+m<- mean(subsetTemperatureTs)#moyenne
+sigma <- var(subsetTemperatureTs) #variance
+##Test Shapiro-Wilk
+shapiro.test(subsetTemperatureTs)
+##Determination des parametres
+#Moyenne theorique
+qt(1-0.025,n-1)
+Lm=m-qt(1-0.025,n-1)*S/sqrt(n)
+Um=m+qt(1-0.025,n-1)*S/sqrt(n)
+Lm
+Um
+mu0= (Lm + Um)/2
+#Variance theorique
+Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
+Uv=(n-1)*S^2/qchisq(0.025,n-1)
+Lv
+Uv
+##Hypothese H0:u0=mu0 contre H1:u1>mu0  
+t.test(subsetTemperatureTs, mu = Lm, alternative = "greater")
+####
 
-####Prix ï¿½lectricitï¿½
+####Prix electricite
 ##formatage des donnees pour correle avec une droite normale
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2013,1), end=c(2019,6))
 ##graphique des donnees formatees
@@ -181,7 +217,7 @@ m<- mean(subsetprixElectriciteTs)#moyenne
 sigma <- var(subsetprixElectriciteTs) #variance
 ##Test Shapiro-Wilk
 shapiro.test(subsetprixElectriciteTs)
-##Dï¿½termination des parametres
+##Determination des parametres
 #Moyenne theorique
 qt(1-0.025,n-1)
 Lm=m-qt(1-0.025,n-1)*S/sqrt(n)
@@ -194,7 +230,7 @@ Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
 Uv=(n-1)*S^2/qchisq(0.025,n-1)
 L
 U
-##Hypothï¿½se H0:??=mu0 contre H1:??>mu0  
+##Hypothese H0:u0=mu0 contre H1:u1>mu0  
 t.test(subsetprixElectriciteTs, mu = Lm, alternative = "greater")
 ####
 
