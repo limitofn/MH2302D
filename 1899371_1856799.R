@@ -8,26 +8,26 @@ library(corrplot)
 ######## Set le path ##########
 setwd(dir="C:\\Users\\marca\\Desktop\\MH2302D")
 
-######################### Entr�e des donn�es ################################# 
+######################### Entree des donnees ################################# 
 donnees <- read.csv("1899371_1856799.csv", header = TRUE, sep = ";",dec = ",")
 donnees
 
 summary(donnees)
 
 
-# ggplot(donnees,aes(Temp�rature.moyen.en.Celsius, y = �lectricit�.produites..M�gawatt.heures.))+geom_point()
+# ggplot(donnees,aes(Temperature.moyen.en.Celsius, y = electricite.produites..Megawatt.heures.))+geom_point()
 ########################### Variable #######################################
-quantiteElectricite <- donnees$�lectricit�.produites..M�gawatt.heures.
+quantiteElectricite <- donnees$electricite.produites..Megawatt.heures.
 quantiteElectricite
 quantiteElectriciteTs <- ts(quantiteElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetElectriciteTs <- window(quantiteElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-prixElectricite <- donnees$Prix.de.vente.de.l.�lectricit�..5000Kw.
+prixElectricite <- donnees$Prix.de.vente.de.l.electricite..5000Kw.
 prixElectricite
 prixElectriciteTs<- ts(prixElectricite, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2017,1), end=c(2018,12))
 
-temperature <- donnees$Temp�rature.moyen.en.Celsius
+temperature <- donnees$Temperature.moyen.en.Celsius
 temperature
 temperatureTs <- ts(temperature, start = c(2008, 1), end=c(2019, 6), frequency = 12)
 subsetTemperatureTs <- window(temperatureTs, start=c(2017,1), end=c(2018,12))
@@ -37,7 +37,7 @@ plot(subsetTemperatureTs,subsetElectriciteTs)
 plot(subsetElectriciteTs,subsetprixElectriciteTs)
 plot(subsetTemperatureTs,subsetprixElectriciteTs)
 
-########################### Analyse Des Donn�es ################################
+########################### Analyse Des Donnees ################################
 ############################ Exploration de Times-Series #########################
 
 #Temperature
@@ -109,24 +109,24 @@ boxplot(temperature, col="orange", horizontal=T, notch = T)
 ############################ Plot #########################################
 
 #plot de quantite d'electricite produite
-plot(quantiteElectricite, type = "h", ylab = "Quantite d'electricite produite (Megawatt/h)", xlab = "Temps �coul� (mois)", 
+plot(quantiteElectricite, type = "h", ylab = "Quantite d'electricite produite (Megawatt/h)", xlab = "Temps ecoule (mois)", 
      main = "Dispersion des valeurs de la production electrique 
-     � partir de 2008-01-01")
+     e partir de 2008-01-01")
 
-#plot du prix de la vente d'�lectricit�
-plot(prixElectricite, type = "h", ylab = "Prix de vente pour 5000Kw", xlab = "Temps �coul� (mois)", 
-     main = "Dispersion des valeurs du prix de vente de l'�lectricit� 
-     � partir de 2008-01-01")
+#plot du prix de la vente d'electricite
+plot(prixElectricite, type = "h", ylab = "Prix de vente pour 5000Kw", xlab = "Temps ecoule (mois)", 
+     main = "Dispersion des valeurs du prix de vente de l'electricite 
+     e partir de 2008-01-01")
 
-#plot de la temp�rature
-plot(temperature, type = "h", ylab = "Temp�rature en Celsius", xlab = "Temps �coul� (mois)", 
-     main = "Dispersion des valeurs de la temp�rature 
-     � partir de 2008-01-01")
+#plot de la temperature
+plot(temperature, type = "h", ylab = "Temperature en Celsius", xlab = "Temps ecoule (mois)", 
+     main = "Dispersion des valeurs de la temperature 
+     e partir de 2008-01-01")
 
 ############################ Graphique Quantile-Quantile ####################
 
 #Graphique quantite d'electricite
-qqnorm(quantiteElectricite, main ="Diagramme de probabilit�s normal de la production �lectrique")
+qqnorm(quantiteElectricite, main ="Diagramme de probabilites normal de la production electrique")
 qqline(quantiteElectricite)
 
 #Graphique prix de vente 
@@ -160,20 +160,20 @@ sd(temperature)/mean(temperature) #coefficient variance
 var(temperature) #variance
 length(temperature)
 
-########################### Fin de l'analyse des donn�es #######################
+########################### Fin de l'analyse des donnees #######################
 
 ########################### Modele et hypothese ################################
 
 
 
-####Prix �lectricit�
+####Prix electricite
 ##formatage des donnees pour correle avec une droite normale
 subsetprixElectriciteTs <- window(prixElectriciteTs, start=c(2013,1), end=c(2019,6))
 ##graphique des donnees formatees
 hist(subsetprixElectriciteTs)
 qqnorm(subsetprixElectriciteTs)
 qqline(subsetprixElectriciteTs)
-##moyenne, variance, �cart-type
+##moyenne, variance, ecart-type
 summary(subsetprixElectriciteTs)
 S<- sd(subsetprixElectriciteTs) #ecart-type
 n<- length(subsetprixElectriciteTs)#le nombre d'observations
@@ -181,7 +181,7 @@ m<- mean(subsetprixElectriciteTs)#moyenne
 sigma <- var(subsetprixElectriciteTs) #variance
 ##Test Shapiro-Wilk
 shapiro.test(subsetprixElectriciteTs)
-##D�termination des parametres
+##Determination des parametres
 #Moyenne theorique
 qt(1-0.025,n-1)
 Lm=m-qt(1-0.025,n-1)*S/sqrt(n)
@@ -194,15 +194,15 @@ Lv=(n-1)*S^2/qchisq(1-0.025,n-1)
 Uv=(n-1)*S^2/qchisq(0.025,n-1)
 L
 U
-##Hypoth�se H0:??=mu0 contre H1:??>mu0  
+##Hypothese H0:??=mu0 contre H1:??>mu0  
 t.test(subsetprixElectriciteTs, mu = Lm, alternative = "greater")
 ####
 
-########################### Fin Mod�le et hypoth�se ############################
+########################### Fin Modele et hypothese ############################
 
-########################### R�gression lin�aire ################################
+########################### Regression lineaire ################################
 
-## Temp�rature ind�pendante, production �lectrique d�pendante
+## Temperature independante, production electrique dependante
 modeLineaireProduction <- lm(quantiteElectricite~ temperature)
 summary(modeLineaireProduction)
 
@@ -214,18 +214,18 @@ summary(modeLineaireProduction)$r.sq
 
 #Creation du graphique
 par(mfrow = c(1,1))
-plot(temperature,quantiteElectricite, main = "Production �lectrique mensuelle selon la temp�rature moyenne",
-     xlab = "Temp�rature en Celsius", ylab = "Production �lectrique (Mw/h)")
+plot(temperature,quantiteElectricite, main = "Production electrique mensuelle selon la temperature moyenne",
+     xlab = "Temperature en Celsius", ylab = "Production electrique (Mw/h)")
 abline(modeLineaireProduction)
 
 #Analyse de la variance 
 anova(modeLineaireProduction)
 
-#Analyse des r�sidus
+#Analyse des residus
 par(mfrow = c(2,2))
 plot(modeLineaireProduction)
 
-## production �lectrique ind�pendante, prix d�pendante 
+## production electrique independante, prix dependante 
 modeLineairePrix <- lm(prixElectricite~ quantiteElectricite)
 summary(modeLineairePrix)
 
@@ -237,18 +237,18 @@ summary(modeLineairePrix)$r.sq
 
 #Creation du graphique
 par(mfrow = c(1,1))
-plot(quantiteElectricite,prixElectricite, main = "Prix de l'�lectricit� selon la quantit� produite",
-     xlab = "Production �lectrique (Mw/h)", ylab = "Prix de l'�tricit� pour 5000kw")
+plot(quantiteElectricite,prixElectricite, main = "Prix de l'electricite selon la quantite produite",
+     xlab = "Production electrique (Mw/h)", ylab = "Prix de l'etricite pour 5000kw")
 abline(modeLineairePrix)
 
 #Analyse de la variance 
 anova(modeLineairePrix)
 
-#Analyse des r�sidus
+#Analyse des residus
 par(mfrow = c(2,2))
 plot(modeLineairePrix)
 
-##R�gression lineaire multiple (Prix d�pendant, quantit� et temp�rature ind�pendante)
+##Regression lineaire multiple (Prix dependant, quantite et temperature independante)
 modelLineaireMult <- lm(prixElectricite~ quantiteElectricite + temperature)
 summary(modelLineaireMult)
 
@@ -259,8 +259,8 @@ modelLineaireMult$coefficients
 summary(modelLineaireMult)$r.sq
 
 #Creation du graphique
-library(scatterplot3d) #� installer � l'aide de install.packages("scatterplot3d")
-library(RColorBrewer) #� installer � l'aide de install.packages("RColorBrewer")
+library(scatterplot3d) #e installer e l'aide de install.packages("scatterplot3d")
+library(RColorBrewer) #e installer e l'aide de install.packages("RColorBrewer")
 
 # get colors for labeling the points
 plotvar <- prixElectricite # pick a variable to plot
@@ -272,17 +272,17 @@ colcode <- plotclr[colornum] # assign color
 # scatter plot
 plot.angle <- 45
 scatterplot3d(quantiteElectricite, temperature, prixElectricite, type="h", angle=plot.angle, color=colcode, pch=20, cex.symbols=2, 
-              col.axis="gray", col.grid="gray", main = "Prix de l'�lectricit� selon la temp�rature et la quantit� produite",
-              xlab = "Production �lectrique (Mw/h)", ylab = "Temp�rature en Celsius", zlab = "Prix de l'�lectricit� pour 5000Kw")
+              col.axis="gray", col.grid="gray", main = "Prix de l'electricite selon la temperature et la quantite produite",
+              xlab = "Production electrique (Mw/h)", ylab = "Temperature en Celsius", zlab = "Prix de l'electricite pour 5000Kw")
 
 #Analyse de la variance
 anova(modelLineaireMult)
 
-#Analyse des r�sidus
+#Analyse des residus
 par(mfrow = c(2,2))
 plot(modelLineaireMult)
 
-########################### Fin R�gression lin�aire ############################
+########################### Fin Regression lineaire ############################
 
 
 
