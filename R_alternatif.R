@@ -84,7 +84,7 @@ mean(donnees$prix)
 
 
 #Analyse en time series :
-#Production Electrique :
+#Temperature :
 
 #TestDickers
 lambda <- BoxCox.lambda(tempTs)
@@ -99,9 +99,30 @@ acf(T_tempTs_d)
 pacf(T_tempTs_d)
 
 #Construction du modele ARIMA
-fit <- arima(tempTs, c(0, 0, 0),seasonal = list(order = c(3, 0, 0), period = 12) )
+fit <- arima(prodTs, c(0, 0, 0),seasonal = list(order = c(4, 0, 0), period = 12) )
 fit
 plot(forecast(fit,h=120))
+
+
+#Production
+
+#TestDickers
+lambda <- BoxCox.lambda(prodTs)
+plot.ts(BoxCox(prodTs, lambda = lambda))
+T_prodTs <- BoxCox(prodTs, lambda = lambda)
+T_prodTs_d <- diff(T_prodTs)
+
+adf.test(T_prodTs_d, alternative="stationary", k=0)
+
+acf(T_prodTs_d)
+
+pacf(T_prodTs_d)
+
+#Construction du modele ARIMA
+fit <- arima(T_prodTs, c(0, 1, 1),seasonal = list(order = c(0, 1, 1), period = 12) )
+fit
+plot(forecast(fit,h=120))
+
 
 ########Generation des relations et regression polynomiale
 
